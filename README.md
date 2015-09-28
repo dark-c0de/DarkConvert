@@ -4,6 +4,6 @@
 Converting Halo Online maps to Eldorado
 
 ## Credits
-DARKC0DE
-Shockfire's HaloOnlineTagTool
-ihatecompvir's research on sbsp vector conversion
+* DARKC0DE
+* Shockfire's HaloOnlineTagTool
+* ihatecompvir's research on sbsp vector conversion
