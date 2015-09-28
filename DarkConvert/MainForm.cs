@@ -39,8 +39,15 @@ namespace DarkConvert
 
         private void btnElLoadScenarioList_Click(object sender, EventArgs e)
         {
-            Thread loadEldoritoTags = new Thread(LoadEldoritoTags);
-            loadEldoritoTags.Start();
+            if (File.Exists(Path.Combine(Properties.Settings.Default.EldoradoMapFolder, "tags.dat")))
+            {
+                Thread loadEldoritoTags = new Thread(LoadEldoritoTags);
+                loadEldoritoTags.Start();
+            }
+            else
+            {
+                MessageBox.Show("Invalid Eldorado Map Directory.", "No tags.dat");
+            }
         }
         public void ConsoleLogit(string Message, params object[] args)
         {
@@ -141,8 +148,15 @@ namespace DarkConvert
         //
         private void btnHOLoadScenarioList_Click(object sender, EventArgs e)
         {
-            Thread loadHaloOnlineTags = new Thread(LoadHaloOnlineTags);
-            loadHaloOnlineTags.Start();
+            if (File.Exists(Path.Combine(Properties.Settings.Default.HOMapFolder, "tags.dat")))
+            {
+                Thread loadHaloOnlineTags = new Thread(LoadHaloOnlineTags);
+                loadHaloOnlineTags.Start();
+            }
+            else
+            {
+                MessageBox.Show("Invalid Eldorado Map Directory.", "No tags.dat");
+            }
         }
         HaloOnlineLib.TagCache HaloOnlineTagCache;
         HaloOnlineLib.StringIdCache HaloOnlineStringIdCache;
