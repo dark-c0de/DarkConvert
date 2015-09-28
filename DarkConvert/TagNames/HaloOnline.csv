@@ -1,3 +1,8 @@
+0x00000000,globals\cache_file_global_tags
+0x00000010,globals\rasterizer_cache_file_globals
+0x00000011,globals\gfx_textures_list
+0x00000012,globals\vfiles_list
+0x00000013,globals\globals
 0x00002D32,levels\multi\guardian\guardian
 0x00002D33,levels\multi\guardian\guardian
 0x00002D34,levels\multi\guardian\guardian_design
