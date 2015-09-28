@@ -99,6 +99,7 @@
             this.btnEldoradoBrowse.TabIndex = 2;
             this.btnEldoradoBrowse.Text = "Browse";
             this.btnEldoradoBrowse.UseVisualStyleBackColor = true;
+            this.btnEldoradoBrowse.Click += new System.EventHandler(this.btnEldoradoBrowse_Click);
             // 
             // label1
             // 
@@ -151,6 +152,7 @@
             this.btnHOBrowse.TabIndex = 5;
             this.btnHOBrowse.Text = "Browse";
             this.btnHOBrowse.UseVisualStyleBackColor = true;
+            this.btnHOBrowse.Click += new System.EventHandler(this.btnHOBrowse_Click);
             // 
             // listHOScenarios
             // 

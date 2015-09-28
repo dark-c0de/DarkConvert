@@ -359,5 +359,38 @@ namespace DarkConvert
             }
             ConsoleLogit("Done!");
         }
+
+        private void btnEldoradoBrowse_Click(object sender, EventArgs e)
+        {
+
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.SelectedPath = txtEldoradoMapFolder.Text;
+            fbd.ShowDialog();
+
+            if (File.Exists(Path.Combine(fbd.SelectedPath, "tags.dat")))
+            {
+                txtEldoradoMapFolder.Text = fbd.SelectedPath;
+            }
+            else
+            {
+                MessageBox.Show("Invalid Eldorado Map Directory.", "No tags.dat");
+            }
+        }
+
+        private void btnHOBrowse_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.SelectedPath = txtHOMapsFolder.Text;
+            fbd.ShowDialog();
+
+            if (File.Exists(Path.Combine(fbd.SelectedPath, "tags.dat")))
+            {
+                txtHOMapsFolder.Text = fbd.SelectedPath;
+            }
+            else
+            {
+                MessageBox.Show("Invalid Halo Online Map Directory.", "No tags.dat");
+            }
+        }
     }
 }
