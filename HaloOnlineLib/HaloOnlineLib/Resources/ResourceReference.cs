@@ -241,6 +241,8 @@ namespace HaloOnlineLib.Resources
 		/// The resource is in video.dat.
 		/// </summary>
 		Video,
+
+        //TODO: Totally guessing here... need to double check this.
         RenderModels,
         Lightmaps
 	}
