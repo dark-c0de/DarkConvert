@@ -35,18 +35,21 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtEldoradoMapFolder = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnHOLoadScenarioList = new System.Windows.Forms.Button();
             this.btnHOBrowse = new System.Windows.Forms.Button();
+            this.listHOScenarios = new System.Windows.Forms.ListBox();
             this.txtHOMapsFolder = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnElListDeps = new System.Windows.Forms.Button();
             this.ConsoleLog = new System.Windows.Forms.RichTextBox();
-            this.btnHOLoadScenarioList = new System.Windows.Forms.Button();
-            this.listHOScenarios = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.btnHOListDeps = new System.Windows.Forms.Button();
+            this.chkHOAllDeps = new System.Windows.Forms.CheckBox();
+            this.chkElAllDeps = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -56,7 +59,9 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkElAllDeps);
             this.groupBox1.Controls.Add(this.btnElLoadScenarioList);
+            this.groupBox1.Controls.Add(this.btnElListDeps);
             this.groupBox1.Controls.Add(this.listElScenarios);
             this.groupBox1.Controls.Add(this.btnEldoradoBrowse);
             this.groupBox1.Controls.Add(this.label1);
@@ -114,6 +119,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.chkHOAllDeps);
+            this.groupBox2.Controls.Add(this.btnHOListDeps);
             this.groupBox2.Controls.Add(this.btnHOLoadScenarioList);
             this.groupBox2.Controls.Add(this.btnHOBrowse);
             this.groupBox2.Controls.Add(this.listHOScenarios);
@@ -126,6 +133,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Halo Online 11.1.530945";
             // 
+            // btnHOLoadScenarioList
+            // 
+            this.btnHOLoadScenarioList.Location = new System.Drawing.Point(344, 179);
+            this.btnHOLoadScenarioList.Name = "btnHOLoadScenarioList";
+            this.btnHOLoadScenarioList.Size = new System.Drawing.Size(109, 23);
+            this.btnHOLoadScenarioList.TabIndex = 6;
+            this.btnHOLoadScenarioList.Text = "Load Scenario List";
+            this.btnHOLoadScenarioList.UseVisualStyleBackColor = true;
+            this.btnHOLoadScenarioList.Click += new System.EventHandler(this.btnHOLoadScenarioList_Click);
+            // 
             // btnHOBrowse
             // 
             this.btnHOBrowse.Location = new System.Drawing.Point(378, 35);
@@ -134,6 +151,14 @@
             this.btnHOBrowse.TabIndex = 5;
             this.btnHOBrowse.Text = "Browse";
             this.btnHOBrowse.UseVisualStyleBackColor = true;
+            // 
+            // listHOScenarios
+            // 
+            this.listHOScenarios.FormattingEnabled = true;
+            this.listHOScenarios.Location = new System.Drawing.Point(15, 65);
+            this.listHOScenarios.Name = "listHOScenarios";
+            this.listHOScenarios.Size = new System.Drawing.Size(438, 108);
+            this.listHOScenarios.TabIndex = 5;
             // 
             // txtHOMapsFolder
             // 
@@ -161,14 +186,16 @@
             this.button1.Text = "Convert SBSP";
             this.button1.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // btnElListDeps
             // 
-            this.button2.Location = new System.Drawing.Point(15, 48);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(101, 23);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Suck a fat dick";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnElListDeps.Enabled = false;
+            this.btnElListDeps.Location = new System.Drawing.Point(15, 177);
+            this.btnElListDeps.Name = "btnElListDeps";
+            this.btnElListDeps.Size = new System.Drawing.Size(101, 23);
+            this.btnElListDeps.TabIndex = 3;
+            this.btnElListDeps.Text = "List Deps";
+            this.btnElListDeps.UseVisualStyleBackColor = true;
+            this.btnElListDeps.Click += new System.EventHandler(this.btnElListDeps_Click);
             // 
             // ConsoleLog
             // 
@@ -181,24 +208,6 @@
             this.ConsoleLog.Size = new System.Drawing.Size(374, 417);
             this.ConsoleLog.TabIndex = 4;
             this.ConsoleLog.Text = "";
-            // 
-            // btnHOLoadScenarioList
-            // 
-            this.btnHOLoadScenarioList.Location = new System.Drawing.Point(344, 179);
-            this.btnHOLoadScenarioList.Name = "btnHOLoadScenarioList";
-            this.btnHOLoadScenarioList.Size = new System.Drawing.Size(109, 23);
-            this.btnHOLoadScenarioList.TabIndex = 6;
-            this.btnHOLoadScenarioList.Text = "Load Scenario List";
-            this.btnHOLoadScenarioList.UseVisualStyleBackColor = true;
-            this.btnHOLoadScenarioList.Click += new System.EventHandler(this.btnHOLoadScenarioList_Click);
-            // 
-            // listHOScenarios
-            // 
-            this.listHOScenarios.FormattingEnabled = true;
-            this.listHOScenarios.Location = new System.Drawing.Point(15, 65);
-            this.listHOScenarios.Name = "listHOScenarios";
-            this.listHOScenarios.Size = new System.Drawing.Size(438, 108);
-            this.listHOScenarios.TabIndex = 5;
             // 
             // groupBox3
             // 
@@ -213,7 +222,6 @@
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.button1);
-            this.groupBox4.Controls.Add(this.button2);
             this.groupBox4.Location = new System.Drawing.Point(868, 12);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(128, 82);
@@ -240,6 +248,37 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "DARKC0DE\r\nShockfire\r\nihatecompvir";
             this.label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // btnHOListDeps
+            // 
+            this.btnHOListDeps.Enabled = false;
+            this.btnHOListDeps.Location = new System.Drawing.Point(15, 177);
+            this.btnHOListDeps.Name = "btnHOListDeps";
+            this.btnHOListDeps.Size = new System.Drawing.Size(101, 23);
+            this.btnHOListDeps.TabIndex = 5;
+            this.btnHOListDeps.Text = "List Deps";
+            this.btnHOListDeps.UseVisualStyleBackColor = true;
+            this.btnHOListDeps.Click += new System.EventHandler(this.btnHOListDeps_Click);
+            // 
+            // chkHOAllDeps
+            // 
+            this.chkHOAllDeps.AutoSize = true;
+            this.chkHOAllDeps.Location = new System.Drawing.Point(122, 181);
+            this.chkHOAllDeps.Name = "chkHOAllDeps";
+            this.chkHOAllDeps.Size = new System.Drawing.Size(68, 17);
+            this.chkHOAllDeps.TabIndex = 7;
+            this.chkHOAllDeps.Text = "All Deps";
+            this.chkHOAllDeps.UseVisualStyleBackColor = true;
+            // 
+            // chkElAllDeps
+            // 
+            this.chkElAllDeps.AutoSize = true;
+            this.chkElAllDeps.Location = new System.Drawing.Point(122, 181);
+            this.chkElAllDeps.Name = "chkElAllDeps";
+            this.chkElAllDeps.Size = new System.Drawing.Size(68, 17);
+            this.chkElAllDeps.TabIndex = 8;
+            this.chkElAllDeps.Text = "All Deps";
+            this.chkElAllDeps.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -276,7 +315,7 @@
         private System.Windows.Forms.TextBox txtEldoradoMapFolder;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnElListDeps;
         private System.Windows.Forms.Button btnHOBrowse;
         private System.Windows.Forms.TextBox txtHOMapsFolder;
         private System.Windows.Forms.Label label2;
@@ -289,6 +328,9 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnHOListDeps;
+        private System.Windows.Forms.CheckBox chkHOAllDeps;
+        private System.Windows.Forms.CheckBox chkElAllDeps;
     }
 }
 

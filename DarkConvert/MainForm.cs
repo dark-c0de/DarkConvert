@@ -43,6 +43,7 @@ namespace DarkConvert
             {
                 Thread loadEldoritoTags = new Thread(LoadEldoritoTags);
                 loadEldoritoTags.Start();
+                btnElListDeps.Enabled = true;
             }
             else
             {
@@ -50,12 +51,16 @@ namespace DarkConvert
             }
         }
         public void ConsoleLogit(string Message, params object[] args)
-        {
-               ConsoleLog.Invoke(new MethodInvoker(delegate
-                {
-                    ConsoleLog.AppendText(string.Format(Message, args) + Environment.NewLine);
-                    ConsoleLog.ScrollToCaret();
-                }));
+        { 
+            ConsoleLog.Invoke(new MethodInvoker(delegate
+             {
+                 ConsoleLog.AppendText(string.Format(Message, args) + Environment.NewLine);
+                 ConsoleLog.ScrollToCaret();
+             }));
+            using (StreamWriter sw = File.AppendText("DarkConvert.log"))
+            {
+                sw.WriteLine(string.Format(Message, args));
+            }	
         }
 
         //
@@ -141,7 +146,63 @@ namespace DarkConvert
             }
             ConsoleLogit("{0} scenario tags loaded", scnr.Count());
         }
+        private void btnElListDeps_Click(object sender, EventArgs e)
+        {
+            if (listElScenarios.SelectedIndex != -1)
+            {
+                Thread listElScenarioDependencies = new Thread(ListElScenarioDependencies);
+                listElScenarioDependencies.Start();
+            }
+            else
+            {
+                MessageBox.Show("Please select a scenario you'd like to list from.");
+            }
+        }
 
+        private void ListElScenarioDependencies()
+        {
+            EldoradoLib.HaloTag scnr = null;
+            listElScenarios.Invoke(new MethodInvoker(delegate
+            {
+                scnr = EldoradoTags.Where(t => t.Class.ToString() == "scnr").ElementAt(listElScenarios.SelectedIndex);
+            }));
+            if (scnr.Dependencies.Count == 0)
+            {
+                ConsoleLogit("Scenario {0:X8} has no dependencies.", scnr.Index);
+
+            }
+            IEnumerable<EldoradoLib.HaloTag> dependencies;
+
+            if (chkElAllDeps.Checked)
+            {
+                dependencies = EldoradoTagCache.Tags.FindDependencies(scnr);
+            }
+            else
+            {
+                dependencies = scnr.Dependencies.Where(i => EldoradoTagCache.Tags.Contains(i)).Select(i => EldoradoTagCache.Tags[i]);
+            }
+
+            ConsoleLogit("Found {0} Depdencies", dependencies.Count());
+
+            foreach (var tag in dependencies)
+            {
+                try
+                {
+                    var offset = string.Format("0x{0:X8}", tag.Index);
+                    var index = EldoradolistA.IndexOf(offset);
+
+                    if (EldoradolistB[index] != "")
+                    {
+                        ConsoleLogit(string.Format("{0:X} {1} [Offset = 0x{2:X}, Size = 0x{3:X}] ({4})", tag.Index, tag.Class, tag.Offset, tag.Size, EldoradolistB[index]));
+                    }
+                }
+                catch (Exception)
+                {
+                    ConsoleLogit(string.Format("{0:X} {1} [Offset = 0x{2:X}, Size = 0x{3:X}]", tag.Index, tag.Class, tag.Offset, tag.Size));
+                }
+            }
+            ConsoleLogit("Done!");
+        }
 
         //
         // HALO ONLINE 11.1.530945
@@ -152,6 +213,7 @@ namespace DarkConvert
             {
                 Thread loadHaloOnlineTags = new Thread(LoadHaloOnlineTags);
                 loadHaloOnlineTags.Start();
+                btnHOListDeps.Enabled = true;
             }
             else
             {
@@ -238,6 +300,64 @@ namespace DarkConvert
                 }));
             }
             ConsoleLogit("{0} scenario tags loaded", scnr.Count());
+        }
+
+
+        private void btnHOListDeps_Click(object sender, EventArgs e)
+        {
+            if (listHOScenarios.SelectedIndex != -1)
+            {
+                Thread listHOScenarioDependencies = new Thread(ListHOScenarioDependencies);
+                listHOScenarioDependencies.Start();
+            }
+            else
+            {
+                MessageBox.Show("Please select a scenario you'd like to list from.");
+            }
+        }
+        private void ListHOScenarioDependencies()
+        {
+            HaloOnlineLib.HaloTag scnr = null;
+            listHOScenarios.Invoke(new MethodInvoker(delegate
+            {
+                scnr = HaloOnlineTags.Where(t => t.Class.ToString() == "scnr").ElementAt(listHOScenarios.SelectedIndex);
+            }));
+            if (scnr.Dependencies.Count == 0)
+            {
+                ConsoleLogit("Scenario {0:X8} has no dependencies.", scnr.Index);
+
+            }
+            IEnumerable<HaloOnlineLib.HaloTag> dependencies;
+
+
+            if (chkHOAllDeps.Checked)
+            {
+                dependencies = HaloOnlineTagCache.Tags.FindDependencies(scnr);
+            }
+            else
+            {
+                dependencies = scnr.Dependencies.Where(i => HaloOnlineTagCache.Tags.Contains(i)).Select(i => HaloOnlineTagCache.Tags[i]);
+            }
+
+            ConsoleLogit("Found {0} Depdencies", dependencies.Count());
+            foreach (var tag in dependencies)
+            {
+                try
+                {
+                    var offset = string.Format("0x{0:X8}", tag.Index);
+                    var index = HaloOnlinelistA.IndexOf(offset);
+
+                    if (HaloOnlinelistB[index] != "")
+                    {
+                        ConsoleLogit(string.Format("{0:X} {1} [Offset = 0x{2:X}, Size = 0x{3:X}] ({4})", tag.Index,tag.Class, tag.Offset, tag.Size, HaloOnlinelistB[index]));
+                    }
+                }
+                catch (Exception)
+                {
+                    ConsoleLogit(string.Format("{0:X} {1} [Offset = 0x{2:X}, Size = 0x{3:X}]", tag.Index, tag.Class, tag.Offset, tag.Size));
+                }
+            }
+            ConsoleLogit("Done!");
         }
     }
 }
