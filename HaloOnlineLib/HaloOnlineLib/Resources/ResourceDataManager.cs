@@ -15,7 +15,9 @@ namespace HaloOnlineLib.Resources
 			{ ResourceLocation.Textures, "textures.dat" },
 			{ ResourceLocation.TexturesB, "textures_b.dat" },
 			{ ResourceLocation.Audio, "audio.dat" },
-			{ ResourceLocation.Video, "video.dat" }
+			{ ResourceLocation.Video, "video.dat" },
+            { ResourceLocation.RenderModels, "render_models.dat" },
+            { ResourceLocation.Lightmaps, "lightmaps.dat" }
 		};
 
 		private readonly Dictionary<ResourceLocation, LoadedCache> _loadedCaches = new Dictionary<ResourceLocation, LoadedCache>();

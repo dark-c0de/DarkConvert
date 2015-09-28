@@ -12,7 +12,7 @@ namespace HaloOnlineLib.TagStructures
 	public class ScenarioStructureBsp
 	{
 		[TagElement]
-		public int Unknown0 { get; set; }
+        public int BSPChecksum { get; set; }
 		[TagElement]
 		public int Unknown4 { get; set; }
 		[TagElement]
@@ -32,21 +32,21 @@ namespace HaloOnlineLib.TagStructures
 		[TagElement]
 		public int Unknown24 { get; set; }
 		[TagElement]
-		public List<TagBlock0> Unknown28 { get; set; }
+        public List<CollisionMaterial> CollisionMaterials { get; set; }
 		[TagElement]
 		public List<TagBlock1> Unknown34 { get; set; }
-		[TagElement]
-		public int Unknown40 { get; set; }
-		[TagElement]
-		public int Unknown44 { get; set; }
-		[TagElement]
-		public int Unknown48 { get; set; }
-		[TagElement]
-		public int Unknown4C { get; set; }
-		[TagElement]
-		public int Unknown50 { get; set; }
-		[TagElement]
-		public int Unknown54 { get; set; }
+        [TagElement]
+        public float WorldBoundsXMin { get; set; }
+        [TagElement]
+        public float WorldBoundsXMax { get; set; }
+        [TagElement]
+        public float WorldBoundsYMin { get; set; }
+        [TagElement]
+        public float WorldBoundsYMax { get; set; }
+        [TagElement]
+        public float WorldBoundsZMin { get; set; }
+        [TagElement]
+        public float WorldBoundsZMax { get; set; }
 		[TagElement]
 		public int Unknown58 { get; set; }
 		[TagElement]
@@ -380,16 +380,16 @@ namespace HaloOnlineLib.TagStructures
 		[TagElement]
 		public int Unknown3B4 { get; set; }
 
-		[TagStructure(Size = 0x18)]
-		public class TagBlock0
-		{
-			[TagElement]
-			public HaloTag Unknown0 { get; set; }
-			[TagElement]
-			public int Unknown10 { get; set; }
-			[TagElement]
-			public int Unknown14 { get; set; }
-		}
+        [TagStructure(Size = 0x18)]
+        public class CollisionMaterial
+        {
+            [TagElement]
+            public HaloTag Shader { get; set; }
+            [TagElement]
+            public short GlobalMatIndex { get; set; }
+            [TagElement]
+            public short Seamindex { get; set; }
+        }
 
 		[TagStructure(Size = 0x1)]
 		public class TagBlock1

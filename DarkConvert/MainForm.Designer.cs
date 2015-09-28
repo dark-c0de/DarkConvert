@@ -50,6 +50,8 @@
             this.btnHOListDeps = new System.Windows.Forms.Button();
             this.chkHOAllDeps = new System.Windows.Forms.CheckBox();
             this.chkElAllDeps = new System.Windows.Forms.CheckBox();
+            this.btnElExtract = new System.Windows.Forms.Button();
+            this.btnHOExtract = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -59,6 +61,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnElExtract);
             this.groupBox1.Controls.Add(this.chkElAllDeps);
             this.groupBox1.Controls.Add(this.btnElLoadScenarioList);
             this.groupBox1.Controls.Add(this.btnElListDeps);
@@ -120,6 +123,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.btnHOExtract);
             this.groupBox2.Controls.Add(this.chkHOAllDeps);
             this.groupBox2.Controls.Add(this.btnHOListDeps);
             this.groupBox2.Controls.Add(this.btnHOLoadScenarioList);
@@ -282,6 +286,26 @@
             this.chkElAllDeps.Text = "All Deps";
             this.chkElAllDeps.UseVisualStyleBackColor = true;
             // 
+            // btnElExtract
+            // 
+            this.btnElExtract.Location = new System.Drawing.Point(263, 177);
+            this.btnElExtract.Name = "btnElExtract";
+            this.btnElExtract.Size = new System.Drawing.Size(75, 23);
+            this.btnElExtract.TabIndex = 9;
+            this.btnElExtract.Text = "Extract";
+            this.btnElExtract.UseVisualStyleBackColor = true;
+            this.btnElExtract.Click += new System.EventHandler(this.btnElExtract_Click);
+            // 
+            // btnHOExtract
+            // 
+            this.btnHOExtract.Location = new System.Drawing.Point(263, 179);
+            this.btnHOExtract.Name = "btnHOExtract";
+            this.btnHOExtract.Size = new System.Drawing.Size(75, 23);
+            this.btnHOExtract.TabIndex = 10;
+            this.btnHOExtract.Text = "Extract";
+            this.btnHOExtract.UseVisualStyleBackColor = true;
+            this.btnHOExtract.Click += new System.EventHandler(this.btnHOExtract_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -333,6 +357,8 @@
         private System.Windows.Forms.Button btnHOListDeps;
         private System.Windows.Forms.CheckBox chkHOAllDeps;
         private System.Windows.Forms.CheckBox chkElAllDeps;
+        private System.Windows.Forms.Button btnElExtract;
+        private System.Windows.Forms.Button btnHOExtract;
     }
 }
 

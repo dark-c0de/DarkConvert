@@ -11,17 +11,17 @@ namespace HaloOnlineLib.TagStructures
 	public class Scenario
 	{
 		[TagElement]
-		public int Unknown0 { get; set; }
+        public int MapType { get; set; }
 		[TagElement]
 		public int Unknown4 { get; set; }
 		[TagElement]
-		public int Unknown8 { get; set; }
+        public int MapID { get; set; }
 		[TagElement]
-		public int UnknownC { get; set; }
+        public int LocalNorth { get; set; }
 		[TagElement]
 		public float Budget { get; set; }
 		[TagElement]
-		public List<TagBlock0> Unknown14 { get; set; }
+        public List<StructureBsp> StructureBSPs { get; set; }
 		[TagElement]
 		public int Unknown20 { get; set; }
 		[TagElement]
@@ -738,20 +738,14 @@ namespace HaloOnlineLib.TagStructures
 		public List<TagBlock113> Unknown828 { get; set; }
 
 		[TagStructure(Size = 0x6C)]
-		public class TagBlock0
+        public class StructureBsp
 		{
 			[TagElement]
-			public HaloTag Unknown0 { get; set; }
+            public HaloTag Bsp { get; set; }
 			[TagElement]
-			public HaloTag Unknown10 { get; set; }
+            public HaloTag Design { get; set; }
 			[TagElement]
-			public int Unknown20 { get; set; }
-			[TagElement]
-			public int Unknown24 { get; set; }
-			[TagElement]
-			public int Unknown28 { get; set; }
-			[TagElement]
-			public int Unknown2C { get; set; }
+            public HaloTag Lighting { get; set; }
 			[TagElement]
 			public int Unknown30 { get; set; }
 			[TagElement]

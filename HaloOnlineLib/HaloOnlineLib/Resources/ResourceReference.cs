@@ -240,7 +240,9 @@ namespace HaloOnlineLib.Resources
 		/// <summary>
 		/// The resource is in video.dat.
 		/// </summary>
-		Video
+		Video,
+        RenderModels,
+        Lightmaps
 	}
 
 	/// <summary>

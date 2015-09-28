@@ -51,7 +51,7 @@ namespace DarkConvert
             }
         }
         public void ConsoleLogit(string Message, params object[] args)
-        { 
+        {
             ConsoleLog.Invoke(new MethodInvoker(delegate
              {
                  ConsoleLog.AppendText(string.Format(Message, args) + Environment.NewLine);
@@ -60,7 +60,7 @@ namespace DarkConvert
             using (StreamWriter sw = File.AppendText("DarkConvert.log"))
             {
                 sw.WriteLine(string.Format(Message, args));
-            }	
+            }
         }
 
         //
@@ -349,7 +349,7 @@ namespace DarkConvert
 
                     if (HaloOnlinelistB[index] != "")
                     {
-                        ConsoleLogit(string.Format("{0:X} {1} [Offset = 0x{2:X}, Size = 0x{3:X}] ({4})", tag.Index,tag.Class, tag.Offset, tag.Size, HaloOnlinelistB[index]));
+                        ConsoleLogit(string.Format("{0:X} {1} [Offset = 0x{2:X}, Size = 0x{3:X}] ({4})", tag.Index, tag.Class, tag.Offset, tag.Size, HaloOnlinelistB[index]));
                     }
                 }
                 catch (Exception)
@@ -390,6 +390,264 @@ namespace DarkConvert
             else
             {
                 MessageBox.Show("Invalid Halo Online Map Directory.", "No tags.dat");
+            }
+        }
+
+        private void btnElExtract_Click(object sender, EventArgs e)
+        {
+            Thread elExtract = new Thread(ElExtract);
+            elExtract.Start();
+        }
+        private void ElExtract()
+        {
+            EldoradoLib.HaloTag scnr = null;
+            listElScenarios.Invoke(new MethodInvoker(delegate
+            {
+                scnr = EldoradoTags.Where(t => t.Class.ToString() == "scnr").ElementAt(listElScenarios.SelectedIndex);
+            }));
+
+            // EldoradoLib.TagCache cache = new EldoradoLib.TagCache(EldoradoTagCache);
+            using (var tagsStream = new FileStream(Path.Combine(Properties.Settings.Default.EldoradoMapFolder, "tags.dat"), FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                var tagContext = new EldoradoLib.Serialization.TagSerializationContext(tagsStream, EldoradoTagCache, scnr);
+
+                var scenario = EldoradoLib.Serialization.TagDeserializer.Deserialize<EldoradoLib.TagStructures.Scenario>(new EldoradoLib.Serialization.TagSerializationContext(tagsStream, EldoradoTagCache, scnr));
+
+                if (scenario.StructureBSPs.Count() == 0)
+                {
+                    ConsoleLogit("The scenario has no sbsps");
+                    return;
+                }
+                ConsoleLogit("Found {0} SBSPs", scenario.StructureBSPs.Count());
+                var sbsp = EldoradoLib.Serialization.TagDeserializer.Deserialize<EldoradoLib.TagStructures.ScenarioStructureBsp>(new EldoradoLib.Serialization.TagSerializationContext(tagsStream, EldoradoTagCache, scenario.StructureBSPs[0].Bsp));
+                if (sbsp.CollisionMaterials.Count() == 0)
+                {
+                    ConsoleLogit("The sbsp has no matterials");
+                    return;
+                }
+                ConsoleLogit("Found {0} Collision Materials", sbsp.CollisionMaterials.Count());
+
+                List<EldoradoLib.TagStructures.Shader> ShaderList = new List<EldoradoLib.TagStructures.Shader>();
+
+
+                foreach (var mat in sbsp.CollisionMaterials)
+                {
+                    var CollMatShader = new EldoradoLib.Serialization.TagSerializationContext(tagsStream, EldoradoTagCache, mat.Shader);
+                    ShaderList.Add(EldoradoLib.Serialization.TagDeserializer.Deserialize<EldoradoLib.TagStructures.Shader>(CollMatShader));
+
+                }
+                if (ShaderList.Count() == 0)
+                {
+                    ConsoleLogit("Failed to find SBSPs Collision Material shaders.");
+                    return;
+                }
+                ConsoleLogit("Found {0} Shaders", ShaderList.Count());
+                ExtractElShaders(ShaderList, tagsStream);
+            }
+        }
+        private void ExtractElShaders(List<EldoradoLib.TagStructures.Shader> ShaderList, FileStream tagsStream)
+        {
+            var resourceManager = new EldoradoLib.Resources.ResourceDataManager();
+            try
+            {
+                resourceManager.LoadCachesFromDirectory(Properties.Settings.Default.EldoradoMapFolder);
+            }
+            catch
+            {
+                ConsoleLogit("Unable to load the resource .dat files.");
+                ConsoleLogit("Make sure that they all exist and are valid.");
+                return;
+            }
+            foreach (var shader in ShaderList)
+            {
+                for (var i = 0; i < shader.PredictedBitmap.Count; i++)
+                {
+                    var BitmapType = EldoradoStringIdCache.GetString(shader.PredictedBitmap[i].Type);
+
+                    if (shader.PredictedBitmap[i].Bitmap == null)
+                    {
+                        continue;
+                    }
+                    var outPath = Path.Combine("EldoradoOutput", "bitmaps");
+
+
+                    try
+                    {
+                        var offset = string.Format("0x{0:X8}", shader.PredictedBitmap[i].Bitmap.Index);
+                        var index = EldoradolistA.IndexOf(offset);
+
+                        if (EldoradolistB[index] != "")
+                        {
+                            outPath = Path.Combine(outPath, EldoradolistB[index] + "-" + BitmapType + ".dds");
+
+                            ConsoleLogit(EldoradolistB[index]);
+                        }
+                        else
+                        {
+                            outPath = Path.Combine(outPath, shader.PredictedBitmap[i].Bitmap.Index.ToString("X8") + "-" + BitmapType + ".dds");
+                            ConsoleLogit(shader.PredictedBitmap[i].Bitmap.Index.ToString("X8") + "-" + BitmapType + ".dds");
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        outPath = Path.Combine(outPath, shader.PredictedBitmap[i].Bitmap.Index.ToString("X8") + "-" + BitmapType + ".dds");
+                        ConsoleLogit(shader.PredictedBitmap[i].Bitmap.Index.ToString("X8") + "-" + BitmapType + ".dds");
+                    }
+
+                    Directory.CreateDirectory(Path.GetDirectoryName(outPath));
+
+                    try
+                    {
+                        var extractor = new EldoradoLib.Resources.Bitmaps.BitmapDdsExtractor(resourceManager);
+
+                        var materialBitmapContext = new EldoradoLib.Serialization.TagSerializationContext(tagsStream, EldoradoTagCache, shader.PredictedBitmap[i].Bitmap);
+                        var bitmap = EldoradoLib.Serialization.TagDeserializer.Deserialize<EldoradoLib.TagStructures.Bitmap>(materialBitmapContext);
+
+                        var ddsOutDir = outPath;
+                        for (var b = 0; b < bitmap.Images.Count; b++)
+                        {
+                            using (var outStream = File.Open(outPath, FileMode.Create, FileAccess.Write))
+                            {
+                                extractor.ExtractDds(bitmap, b, outStream);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ConsoleLogit("Error extracting texture for sbsp: " + e.Message);
+                    }
+                }
+            }
+        }
+
+        private void btnHOExtract_Click(object sender, EventArgs e)
+        {
+            Thread hoExtract = new Thread(HOExtract);
+            hoExtract.Start();
+        }
+        private void HOExtract()
+        {
+            HaloOnlineLib.HaloTag scnr = null;
+            listHOScenarios.Invoke(new MethodInvoker(delegate
+            {
+                scnr = HaloOnlineTags.Where(t => t.Class.ToString() == "scnr").ElementAt(listHOScenarios.SelectedIndex);
+            }));
+
+            using (var tagsStream = new FileStream(Path.Combine(Properties.Settings.Default.HOMapFolder, "tags.dat"), FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                var tagContext = new HaloOnlineLib.Serialization.TagSerializationContext(tagsStream, HaloOnlineTagCache, scnr);
+
+                var scenario = HaloOnlineLib.Serialization.TagDeserializer.Deserialize<HaloOnlineLib.TagStructures.Scenario>(new HaloOnlineLib.Serialization.TagSerializationContext(tagsStream, HaloOnlineTagCache, scnr));
+
+                if (scenario.StructureBSPs.Count() == 0)
+                {
+                    ConsoleLogit("The scenario has no sbsps");
+                    return;
+                }
+                ConsoleLogit("Found {0} SBSPs", scenario.StructureBSPs.Count());
+                
+                
+                //TODO: Figure out why this breaks!
+                var sbsp = HaloOnlineLib.Serialization.TagDeserializer.Deserialize<HaloOnlineLib.TagStructures.ScenarioStructureBsp>(new HaloOnlineLib.Serialization.TagSerializationContext(tagsStream, HaloOnlineTagCache, scenario.StructureBSPs[0].Bsp));
+               /*
+                if (sbsp.CollisionMaterials.Count() == 0)
+                {
+                    ConsoleLogit("The sbsp has no matterials");
+                    return;
+                }
+                ConsoleLogit("Found {0} Collision Materials", sbsp.CollisionMaterials.Count());
+
+                List<HaloOnlineLib.TagStructures.Shader> ShaderList = new List<HaloOnlineLib.TagStructures.Shader>();
+
+
+                foreach (var mat in sbsp.CollisionMaterials)
+                {
+                    var CollMatShader = new HaloOnlineLib.Serialization.TagSerializationContext(tagsStream, HaloOnlineTagCache, mat.Shader);
+                    ShaderList.Add(HaloOnlineLib.Serialization.TagDeserializer.Deserialize<HaloOnlineLib.TagStructures.Shader>(CollMatShader));
+
+                }
+                if (ShaderList.Count() == 0)
+                {
+                    ConsoleLogit("Failed to find SBSPs Collision Material shaders.");
+                    return;
+                }
+                ConsoleLogit("Found {0} Shaders", ShaderList.Count());
+                //ExtractHOShaders(ShaderList, tagsStream);
+                */
+            }
+        }
+        private void ExtractHOShaders(List<HaloOnlineLib.TagStructures.Shader> ShaderList, FileStream tagsStream)
+        {
+            var resourceManager = new HaloOnlineLib.Resources.ResourceDataManager();
+            try
+            {
+                resourceManager.LoadCachesFromDirectory(Properties.Settings.Default.HOMapFolder);
+            }
+            catch
+            {
+                ConsoleLogit("Unable to load the resource .dat files.");
+                ConsoleLogit("Make sure that they all exist and are valid.");
+                return;
+            }
+            foreach (var shader in ShaderList)
+            {
+                for (var i = 0; i < shader.PredictedBitmap.Count; i++)
+                {
+                    var BitmapType = EldoradoStringIdCache.GetString(shader.PredictedBitmap[i].Type);
+
+                    if (shader.PredictedBitmap[i].Bitmap == null)
+                    {
+                        continue;
+                    }
+                    var outPath = Path.Combine("HaloOnlineOutput", "bitmaps");
+
+
+                    try
+                    {
+                        var offset = string.Format("0x{0:X8}", shader.PredictedBitmap[i].Bitmap.Index);
+                        var index = HaloOnlinelistA.IndexOf(offset);
+
+                        if (HaloOnlinelistB[index] != "")
+                        {
+                            outPath = Path.Combine(outPath, HaloOnlinelistB[index] + "-" + BitmapType + ".dds");
+
+                            ConsoleLogit(HaloOnlinelistB[index]);
+                        }
+                        else
+                        {
+                            outPath = Path.Combine(outPath, shader.PredictedBitmap[i].Bitmap.Index.ToString("X8") + "-" + BitmapType + ".dds");
+                            ConsoleLogit(shader.PredictedBitmap[i].Bitmap.Index.ToString("X8") + "-" + BitmapType + ".dds");
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        outPath = Path.Combine(outPath, shader.PredictedBitmap[i].Bitmap.Index.ToString("X8") + "-" + BitmapType + ".dds");
+                        ConsoleLogit(shader.PredictedBitmap[i].Bitmap.Index.ToString("X8") + "-" + BitmapType + ".dds");
+                    }
+
+                    Directory.CreateDirectory(Path.GetDirectoryName(outPath));
+
+                    try
+                    {
+                        var extractor = new HaloOnlineLib.Resources.Bitmaps.BitmapDdsExtractor(resourceManager);
+
+                        var materialBitmapContext = new HaloOnlineLib.Serialization.TagSerializationContext(tagsStream, HaloOnlineTagCache, shader.PredictedBitmap[i].Bitmap);
+                        var bitmap = HaloOnlineLib.Serialization.TagDeserializer.Deserialize<HaloOnlineLib.TagStructures.Bitmap>(materialBitmapContext);
+
+                        var ddsOutDir = outPath;
+                        for (var b = 0; b < bitmap.Images.Count; b++)
+                        {
+                            using (var outStream = File.Open(outPath, FileMode.Create, FileAccess.Write))
+                            {
+                                extractor.ExtractDds(bitmap, b, outStream);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ConsoleLogit("Error extracting texture for sbsp: " + e.Message);
+                    }
+                }
             }
         }
     }
