@@ -182,7 +182,7 @@ namespace DarkConvert
                 dependencies = scnr.Dependencies.Where(i => EldoradoTagCache.Tags.Contains(i)).Select(i => EldoradoTagCache.Tags[i]);
             }
 
-            ConsoleLogit("Found {0} Depdencies", dependencies.Count());
+            ConsoleLogit("Found {0} Dependencies", dependencies.Count());
 
             foreach (var tag in dependencies)
             {
@@ -339,7 +339,7 @@ namespace DarkConvert
                 dependencies = scnr.Dependencies.Where(i => HaloOnlineTagCache.Tags.Contains(i)).Select(i => HaloOnlineTagCache.Tags[i]);
             }
 
-            ConsoleLogit("Found {0} Depdencies", dependencies.Count());
+            ConsoleLogit("Found {0} Dependencies", dependencies.Count());
             foreach (var tag in dependencies)
             {
                 try
