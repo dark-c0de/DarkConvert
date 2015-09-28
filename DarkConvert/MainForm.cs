@@ -547,9 +547,9 @@ namespace DarkConvert
                 ConsoleLogit("Found {0} SBSPs", scenario.StructureBSPs.Count());
                 
                 
-                //TODO: Figure out why this breaks!
+                //TODO: Figure out why we can't have the full SBSP structure...
                 var sbsp = HaloOnlineLib.Serialization.TagDeserializer.Deserialize<HaloOnlineLib.TagStructures.ScenarioStructureBsp>(new HaloOnlineLib.Serialization.TagSerializationContext(tagsStream, HaloOnlineTagCache, scenario.StructureBSPs[0].Bsp));
-               /*
+               
                 if (sbsp.CollisionMaterials.Count() == 0)
                 {
                     ConsoleLogit("The sbsp has no matterials");
@@ -572,8 +572,8 @@ namespace DarkConvert
                     return;
                 }
                 ConsoleLogit("Found {0} Shaders", ShaderList.Count());
-                //ExtractHOShaders(ShaderList, tagsStream);
-                */
+                ExtractHOShaders(ShaderList, tagsStream);
+                
             }
         }
         private void ExtractHOShaders(List<HaloOnlineLib.TagStructures.Shader> ShaderList, FileStream tagsStream)
@@ -593,7 +593,7 @@ namespace DarkConvert
             {
                 for (var i = 0; i < shader.PredictedBitmap.Count; i++)
                 {
-                    var BitmapType = EldoradoStringIdCache.GetString(shader.PredictedBitmap[i].Type);
+                    var BitmapType = HaloOnlineStringIdCache.GetString(shader.PredictedBitmap[i].Type);
 
                     if (shader.PredictedBitmap[i].Bitmap == null)
                     {
